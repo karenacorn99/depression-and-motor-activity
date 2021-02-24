@@ -1,1 +1,1 @@
-# Understanding depresion with motor activity data collected using sensors
+# Understanding depression with motor activity data collected using sensors
