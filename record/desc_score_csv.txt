@@ -1,0 +1,82 @@
+=== scores.csv ===
+55 rows
+12 columns: 
+['number', 'days', 'gender', 'age', 'afftype', 'melanch', 'inpatient', 'edu', 'marriage', 'work', 'madrs1', 'madrs2']
+{'afftype': '1: bipolar II, 2: unipolar depressive, 3: bipolar I',
+ 'age': 'age group of patient',
+ 'days': 'number of days of measurement',
+ 'edu': 'education grouped in years',
+ 'gender': '1: female, 2: male',
+ 'inpatient': '1: inpatient, 2: outpatient',
+ 'madrs1': 'MADRS score when measurement started',
+ 'madrs2': 'MADRS when measurement stopped',
+ 'marriage': '1: married or cohabiting, 2: single',
+ 'melanch': 'melancholia, 1 for yes, 3 for no',
+ 'number': 'patient identifier',
+ 'work': '1: working or studying, 2: unemployed/sick leave/pension'}
+days
+[(5, 1),
+ (7, 1),
+ (8, 3),
+ (9, 3),
+ (11, 3),
+ (12, 2),
+ (13, 31),
+ (14, 6),
+ (16, 3),
+ (18, 1),
+ (20, 1)]
+gender
+[(1, 30), (2, 25)]
+age
+[('20-24', 6),
+ ('25-29', 7),
+ ('30-34', 7),
+ ('35-39', 7),
+ ('40-44', 5),
+ ('45-49', 9),
+ ('50-54', 9),
+ ('55-59', 1),
+ ('60-64', 2),
+ ('65-69', 2)]
+total # of days condition: 291
+total # of days control: 402
+afftype
+[(1.0, 7), (2.0, 15), (3.0, 1)]
+melanch
+[(2.0, 19), (nan, 1), (nan, 1), (nan, 1), (1.0, 1)]
+inpatient
+[(1.0, 5), (2.0, 18)]
+edu
+[(' ', 1), ('11-15', 8), ('16-20', 2), ('6-10', 12)]
+marriage
+[(1.0, 11), (2.0, 12)]
+work
+[(1.0, 3), (2.0, 20)]
+madrs1
+[(13.0, 1),
+ (14.0, 1),
+ (17.0, 1),
+ (18.0, 3),
+ (19.0, 1),
+ (20.0, 2),
+ (24.0, 4),
+ (25.0, 1),
+ (26.0, 4),
+ (27.0, 1),
+ (28.0, 2),
+ (29.0, 2)]
+madrs2
+[(11.0, 1),
+ (13.0, 1),
+ (15.0, 3),
+ (16.0, 2),
+ (17.0, 1),
+ (18.0, 1),
+ (19.0, 2),
+ (21.0, 4),
+ (23.0, 1),
+ (24.0, 1),
+ (25.0, 3),
+ (26.0, 2),
+ (28.0, 1)]

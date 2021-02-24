@@ -5,9 +5,11 @@ from collections import Counter
 def inspect_scores_csv():
     scores_file = '../data/scores.csv'
     scores_df = pd.read_csv(scores_file)
-    print('=== scores.csv ===')
-    print('{} rows'.format(len(scores_df)))
-    print('{} columns: \n{}'.format(len(scores_df.columns), list(scores_df.columns)))
+    desc_str = ''
+    desc_str += '=== scores.csv ===\n'
+    desc_str += '{} rows\n'.format(len(scores_df))
+    # columns info
+    desc_str += '{} columns: \n{}\n'.format(len(scores_df.columns), list(scores_df.columns))
     column_info = {'number': 'patient identifier',
                    'days': 'number of days of measurement',
                    'gender': '1: female, 2: male',
@@ -24,11 +26,30 @@ def inspect_scores_csv():
                    'madrs2': 'MADRS when measurement stopped'
                    # 0-6: no depression 7-19: mild 20-34: moderate >35: severe
                    }
-    #pprint.pprint(column_info)
-    pprint.pprint(sorted(Counter(scores_df['days']).items()))
-
-    return
-
+    column_info_str = pprint.pformat(column_info)
+    desc_str += (column_info_str + '\n')
+    desc_str += 'days\n' + pprint.pformat(sorted(Counter(scores_df['days']).items())) + '\n'
+    desc_str += 'gender\n' + pprint.pformat(sorted(Counter(scores_df['gender']).items())) + '\n'
+    desc_str += 'age\n' + pprint.pformat(sorted(Counter(scores_df['age']).items())) + '\n'
+    condition_df = scores_df.iloc[:23, :]
+    assert len(condition_df) == 23
+    control_df = scores_df.iloc[23:, :]
+    assert len(control_df) == 32
+    desc_str += 'total # of days condition: {}\n'.format(sum(condition_df['days']))
+    desc_str += 'total # of days control: {}\n'.format(sum(control_df['days']))
+    desc_str += 'afftype\n' + pprint.pformat(sorted(Counter(condition_df['afftype']).items())) + '\n'
+    desc_str += 'melanch\n' + pprint.pformat(sorted(Counter(condition_df['melanch']).items())) + '\n'
+    desc_str += 'inpatient\n' + pprint.pformat(sorted(Counter(condition_df['inpatient']).items())) + '\n'
+    desc_str += 'edu\n' + pprint.pformat(sorted(Counter(condition_df['edu']).items())) + '\n'
+    desc_str += 'marriage\n' + pprint.pformat(sorted(Counter(condition_df['marriage']).items())) + '\n'
+    desc_str += 'work\n' + pprint.pformat(sorted(Counter(condition_df['work']).items())) + '\n'
+    desc_str += 'madrs1\n' + pprint.pformat(sorted(Counter(condition_df['madrs1']).items())) + '\n'
+    desc_str += 'madrs2\n' + pprint.pformat(sorted(Counter(condition_df['madrs2']).items())) + '\n'
+    # control individuals only have number, days, gender and age
+    # condition_22 has empty string for edu
+    return desc_str
 
 if __name__ == '__main__':
-    inspect_scores_csv()
+    score_desc = inspect_scores_csv()
+    with open('../record/desc_score_csv.txt', 'w') as f:
+        f.write(score_desc)
