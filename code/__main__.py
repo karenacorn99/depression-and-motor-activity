@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from subject import subject
+from feature_gen import *
 
 if __name__ == '__main__':
     ### initialize subjects from score.csv ###
@@ -14,13 +15,21 @@ if __name__ == '__main__':
     subjects = [subject(row.number, row.days, row.gender, row.age, row.afftype, row.melanch,
                         row.inpatient, row.edu, row.marriage, row.work, row.madrs1, row.madrs2)
                 for row in scores_df.itertuples()]
-    for s in subjects:
-        print(s)
+    #for s in subjects:
+        #print(s)
 
     # add motor data
     for s in subjects:
-        file = '../data/' + s.type + '/' + s.number + '.csv'
-        s.activity = pd.read_csv(file)
+        file = '../data/' + s.label + '/' + s.number + '.csv'
+        s.add_motor_data(file)
+
+    X_raw, y = generate_data(subjects)
+    print(get_features(X_raw))
+
+
+
+
+
 
 
 
