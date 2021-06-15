@@ -29,6 +29,6 @@ def get_mean(X_raw):
 def get_std(X_raw):
     return list(map(lambda x : [np.std(x)], X_raw))
 
-# percenrage of events with no activity ie activity level = 0
+# percentage of events with no activity ie activity level = 0
 def get_num_zero_activity(X_raw):
     return list(map(lambda x : [sum(np.array(x) == 0) / len(x)], X_raw))

@@ -1,30 +1,31 @@
-import pandas as pd
-import numpy as np
-from subject import subject
 from feature_gen import *
+from utils import *
+from modeling import *
+import pickle
+
+from sklearn.metrics import accuracy_score
 
 if __name__ == '__main__':
-    ### initialize subjects from score.csv ###
-    scores_df = pd.read_csv('../data/scores.csv')
-    # replace nan & empty str with -1
-    scores_df = scores_df.replace(np.nan, -1)
-    scores_df = scores_df.replace(' ', -1)
-    # check there is no nan
-    assert scores_df.isnull().sum().sum() == 0
 
-    subjects = [subject(row.number, row.days, row.gender, row.age, row.afftype, row.melanch,
-                        row.inpatient, row.edu, row.marriage, row.work, row.madrs1, row.madrs2)
-                for row in scores_df.itertuples()]
-    #for s in subjects:
-        #print(s)
+    #create_and_save_subjects()
 
-    # add motor data
-    for s in subjects:
-        file = '../data/' + s.label + '/' + s.number + '.csv'
-        s.add_motor_data(file)
+    # load pre-saved subjects
+    with open('../data/subject.pkl', 'rb') as input:
+        subjects =  pickle.load(input)
 
     X_raw, y = generate_data(subjects)
-    print(get_features(X_raw))
+    X = get_features(X_raw)
+
+    # KNN_pred = KNN(X, y)
+    #LinearSVM_pred = Linear_SVC(X, y)
+    #RBFSVM_pred = RBFSVM(X, y)
+    DT_pred =  DecisionTree(X, y)
+    acc = accuracy_score(y, DT_pred)
+    print(acc)
+
+
+
+
 
 
 

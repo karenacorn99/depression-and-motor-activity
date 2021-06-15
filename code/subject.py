@@ -26,6 +26,7 @@ class subject:
         # add full df
         motor_data_df = pd.read_csv(file)
         self.motor_data_df = motor_data_df
+        # remove date portion from timestamp column
         self.motor_data_df['timestamp'] = self.motor_data_df['timestamp'].apply(lambda x : x.split()[1])
         # split full df by day
         self.motor_data_days = {k : self.motor_data_df.iloc[v, [0, 2]] for k, v in self.motor_data_df.groupby(['date']).groups.items()}
