@@ -2,26 +2,33 @@ from feature_gen import *
 from utils import *
 from modeling import *
 import pickle
+from metrics import *
+from sklearn.metrics import *
+import argparse
 
 from sklearn.metrics import accuracy_score
 
 if __name__ == '__main__':
 
-    #create_and_save_subjects()
+    # create_and_save_subjects()
 
-    # load pre-saved subjects
-    with open('../data/subject.pkl', 'rb') as input:
-        subjects =  pickle.load(input)
+    # parse command line arguments
+    parser = argparse.ArgumentParser(description="Process experiment configuration")
+    parser.add_argument('--model', help='choose model')
+    parser.add_argument('--features', help='select features to be used')
+    args = vars(parser.parse_args())
+    print("========== Start Experiment ==========")
+    print('\n'.join("{:10} {}".format(k+':', v) for k, v in args.items()))
 
-    X_raw, y = generate_data(subjects)
-    X = get_features(X_raw)
+    # get list of features
+    features = args['features'].split('+')
+    # generate training data & label
+    X, y = get_training_data(features)
+    # train and evaluation
+    result = run_model(X, y, args['model'])
+    print(result)
+    print("========== End of Experiment ==========")
 
-    # KNN_pred = KNN(X, y)
-    #LinearSVM_pred = Linear_SVC(X, y)
-    #RBFSVM_pred = RBFSVM(X, y)
-    DT_pred =  DecisionTree(X, y)
-    acc = accuracy_score(y, DT_pred)
-    print(acc)
 
 
 

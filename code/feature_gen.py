@@ -1,4 +1,19 @@
 import numpy as np
+import pickle
+
+def get_training_data(features):
+    subjects = get_subjects()
+    X_raw, y = generate_data(subjects)
+    # convert y to numeric label
+    y = list(map(lambda x : 1 if x == 'condition' else 0, y))
+    X = get_features(X_raw, features)
+    return (X, y)
+
+# load pre-saved subjects from saved file
+def get_subjects():
+    with open('../data/subject.pkl', 'rb') as input:
+        subjects = pickle.load(input)
+    return subjects
 
 def generate_data(subjects):
     X_raw = []
@@ -10,12 +25,21 @@ def generate_data(subjects):
     assert len(X_raw) == len(y)
     return (X_raw, y)
 
-def get_features(X_raw):
-    mean = get_mean(X_raw)
-    std = get_std(X_raw)
-    num_zero_activity = get_num_zero_activity(X_raw)
-    # concatenate elementwise
-    feature_vectors = np.array([m + s + n for m, s, n in zip(mean, std, num_zero_activity)])
+def get_features(X_raw, features):
+
+    feature_func_dic = {'mean': get_mean, 'std': get_std, 'num_zero_activity': get_num_zero_activity}
+
+    feature_vectors = []
+
+    for f in features:
+        feature_function = feature_func_dic[f]
+        current_feature_vector = feature_function(X_raw)
+        print(current_feature_vector)
+        feature_vectors.append(current_feature_vector)
+    print(feature_vectors)
+
+    # # concatenate elementwise
+    # feature_vectors = np.array([m + s + n for m, s, n in zip(mean, std, num_zero_activity)])
     # normalize
     feature_vectors = feature_vectors - feature_vectors.mean(axis=0, keepdims=True)
     feature_vectors = feature_vectors / (feature_vectors.std(axis=0) + 1e-10) # prevent division by 0

@@ -32,10 +32,6 @@ class subject:
         self.motor_data_days = {k : self.motor_data_df.iloc[v, [0, 2]] for k, v in self.motor_data_df.groupby(['date']).groups.items()}
         return
 
-    # plot a single day's motor data
-    def view_motor_data_by_day(self, day=0):
-        return
-
     def __str__(self):
         return pprint.pformat(self.__dict__)
 

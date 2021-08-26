@@ -2,6 +2,9 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn import svm
 from sklearn import tree
 
+def run_model(X, y, model):
+    return
+
 def KNN(X, y):
     clf = KNeighborsClassifier(n_neighbors=5)
     clf.fit(X, y)
