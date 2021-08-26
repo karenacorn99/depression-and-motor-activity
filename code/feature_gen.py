@@ -27,16 +27,18 @@ def generate_data(subjects):
 
 def get_features(X_raw, features):
 
+    # feature_len_dic = {'mean': 1, 'std': 1, 'num_zero_activity': 1}
     feature_func_dic = {'mean': get_mean, 'std': get_std, 'num_zero_activity': get_num_zero_activity}
 
+    # feature_vector_length = np.sum([feature_len_dic.get(f) for f in features])
     feature_vectors = []
 
-    for f in features:
+    for index, f in enumerate(features):
         feature_function = feature_func_dic[f]
         current_feature_vector = feature_function(X_raw)
-        print(current_feature_vector)
         feature_vectors.append(current_feature_vector)
-    print(feature_vectors)
+    feature_vectors = np.concatenate(feature_vectors, axis=1)
+    print(feature_vectors.shape)
 
     # # concatenate elementwise
     # feature_vectors = np.array([m + s + n for m, s, n in zip(mean, std, num_zero_activity)])
