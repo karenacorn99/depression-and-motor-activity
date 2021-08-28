@@ -1,6 +1,14 @@
 from sklearn.metrics import *
 import numpy as np
 
+def get_performance(y_true, y_pred):
+    return {'precision': get_prec(y_true, y_pred),
+            'recall/sensitivity': get_rec(y_true, y_pred),
+            'accuracy': get_accuracy(y_true, y_pred),
+            'specificity': get_spec(y_true, y_pred),
+            'Matthews correlation': get_mcc(y_true, y_pred),
+            'f1': get_f1(y_true, y_pred)}
+
 # Precision
 def get_prec(y_true, y_pred):
     class_0, class_1 = precision_score(y_true, y_pred, average=None)
@@ -15,8 +23,8 @@ def get_rec(y_true, y_pred):
 
 # Accuracy
 def get_accuracy(y_true, y_pred):
-    accuracy = get_accuracy(y_true, y_pred)
-    return (accuracy, accuracy, accuracy)
+    accuracy = accuracy_score(y_true, y_pred)
+    return accuracy, accuracy, accuracy
 
 # Specificity: how many negative selected elements are truly negative?
 def get_spec(y_true, y_pred):

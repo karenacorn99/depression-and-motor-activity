@@ -26,7 +26,6 @@ if __name__ == '__main__':
     X, y = get_training_data(features)
     # train and evaluation
     result = run_model(X, y, args['model'])
-    print(result)
     print("========== End of Experiment ==========")
 
 

@@ -1,8 +1,23 @@
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import svm
 from sklearn import tree
+from sklearn.model_selection import *
 
 def run_model(X, y, model):
+    total_performance = {'precision': 0,
+     'recall/sensitivity': 0,
+     'accuracy': 0,
+     'specificity': 0,
+     'Matthews correlation': 0,
+     'f1': 0}
+
+    # 10-fold cross validation
+    kf = KFold(n_splits=10, shuffle=True, random_state=42)
+    for train_index, test_index in kf.split(X):
+        X_train, X_test = X[train_index], X[test_index]
+        y_train, y_test = y[train_index], y[test_index]
+
+    avg_performance = {k: v/10 for k, v in total_performance.items()}
     return
 
 def KNN(X, y):
@@ -22,6 +37,7 @@ def RBFSVM(X, y):
     clf.fit(X, y)
     predictions = clf.predict(X)
     return predictions
+
 def GaussianProcess(X, y):
     return
 
