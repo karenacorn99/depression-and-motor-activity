@@ -1,16 +1,13 @@
 from feature_gen import *
-from utils import *
 from modeling import *
-import pickle
-from metrics import *
-from sklearn.metrics import *
 import argparse
 
-from sklearn.metrics import accuracy_score
 
 if __name__ == '__main__':
 
     # create_and_save_subjects()
+
+    # python __main__.py --model NeuralNet --features mean+std+num_zero_activity
 
     # parse command line arguments
     parser = argparse.ArgumentParser(description="Process experiment configuration")
@@ -26,6 +23,7 @@ if __name__ == '__main__':
     X, y = get_training_data(features)
     # train and evaluation
     result = run_model(X, y, args['model'])
+    print('\n'.join("{:30} {}".format(k+':', v) for k, v in result.items()))
     print("========== End of Experiment ==========")
 
 

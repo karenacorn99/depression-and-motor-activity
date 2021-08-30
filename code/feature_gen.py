@@ -6,7 +6,7 @@ def get_training_data(features):
     subjects = get_subjects()
     X_raw, y = generate_data(subjects)
     # convert y to numeric label
-    y = list(map(lambda x : 1 if x == 'condition' else 0, y))
+    y = np.array(list(map(lambda x : 1 if x == 'condition' else 0, y)))
     X = get_features(X_raw, features)
     return (X, y)
 
@@ -46,7 +46,6 @@ def get_features(X_raw, features):
         feature_vectors.append(np.array(current_feature_vector))
     #  concatenate element wise
     feature_matrix = np.concatenate(feature_vectors, axis=1)
-    print(np.array(feature_matrix.shape))
 
     # normalize each feature
     feature_matrix = np.apply_along_axis(lambda x: x - np.mean(x), 0, feature_matrix)
