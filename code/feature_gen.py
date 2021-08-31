@@ -28,6 +28,7 @@ def generate_data(subjects):
             df.set_index("timestamp", inplace=True)
             df = df.reindex(full_timestamps).fillna(-1)
             X_raw.append(df['activity'].tolist())
+            assert len(df['activity']) == 24*60
             y.append(s.label)
     assert len(X_raw) == len(y)
     return (X_raw, y)
@@ -35,7 +36,8 @@ def generate_data(subjects):
 def get_features(X_raw, features):
 
     # feature_len_dic = {'mean': 1, 'std': 1, 'num_zero_activity': 1}
-    feature_func_dic = {'mean': get_mean, 'std': get_std, 'num_zero_activity': get_num_zero_activity}
+    feature_func_dic = {'mean': get_mean, 'std': get_std, 'num_zero_activity': get_num_zero_activity,
+                        'hour_mean': get_hour_mean, 'activity_mean': get_activity_mean, 'sleep_pattern': get_sleep_pattern}
 
     # feature_vector_length = np.sum([feature_len_dic.get(f) for f in features])
     feature_vectors = []
@@ -56,7 +58,8 @@ def get_features(X_raw, features):
 # mean activity level
 def get_mean(X_raw):
     # use masked array to ignore -1
-    return np.apply_along_axis(lambda x: [np.mean(np.ma.array(x, mask=(x==-1)))], 1, np.array(X_raw))
+    means = np.apply_along_axis(lambda x: [np.mean(np.ma.array(x, mask=(x==-1)))], 1, np.array(X_raw))
+    return np.nan_to_num(means, nan=0.0)
 
 # standard deviation
 def get_std(X_raw):
@@ -67,3 +70,25 @@ def get_std(X_raw):
 def get_num_zero_activity(X_raw):
     # use masked array to ignore -1
     return np.apply_along_axis(lambda x: [np.sum(np.ma.array(x, mask=(x==-1))) / np.sum(x!=-1)], 1, np.array(X_raw))
+
+def get_hour_mean(X_raw):
+    # fill all missing values with 0
+    X = np.array(X_raw)
+    X[X==-1] = 0
+    print(np.array(X_raw).shape)
+    # group into hours
+    X = np.array(X_raw).reshape(-1, 24, 60)
+    X = np.apply_along_axis(np.mean, 2, X)
+    return X
+
+def get_activity_mean(X_raw):
+    # avg of non-zero activity level
+    # how much do you move every time you do stand up?
+    X = np.array(X_raw, dtype=np.float64)
+    X[X==0] = -1
+    return get_mean(X)
+
+def get_sleep_pattern(X_raw, threshold=70):
+
+    return
+

@@ -7,7 +7,7 @@ if __name__ == '__main__':
 
     # create_and_save_subjects()
 
-    # python __main__.py --model NeuralNet --features mean+std+num_zero_activity
+    # python __main__.py --model KNN --features activity_mean
 
     # parse command line arguments
     parser = argparse.ArgumentParser(description="Process experiment configuration")
