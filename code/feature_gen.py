@@ -2,6 +2,8 @@ import numpy as np
 import pickle
 import pandas as pd
 
+full_timestamps = ["{:02d}:{:02d}:00".format(hour, minute) for hour in range(24) for minute in range(60)]
+
 def get_training_data(features):
     subjects = get_subjects()
     X_raw, y = generate_data(subjects)
@@ -17,7 +19,6 @@ def get_subjects():
     return subjects
 
 def generate_data(subjects):
-    full_timestamps = ["{:02d}:{:02d}:00".format(hour, minute) for hour in range(24) for minute in range(60)]
     assert len(full_timestamps) == 24 * 60
 
     # fill missing timestamps with None
@@ -88,7 +89,31 @@ def get_activity_mean(X_raw):
     X[X==0] = -1
     return get_mean(X)
 
-def get_sleep_pattern(X_raw, threshold=70):
+def get_sleep_pattern(X_raw, threshold=300):
+    return np.apply_along_axis(get_sleep_pattern_from_array, 1, np.array(X_raw))
 
-    return
+def get_sleep_pattern_from_array(x, threshold=70):
+    # reset timestamp, start from noon, end at 11:59am
+    x = np.roll(x, 12 * 60)
+    rolled_timestamps = np.roll(np.array(full_timestamps), 12 * 60)
+    # convert to binary array
+    x = np.where(x <= threshold, 1, 0)
+    max_count, start_index, end_index = get_longest_consecutive_ones(x)
+    #TODO: convert to numerical values
+    return [max_count, rolled_timestamps[start_index], rolled_timestamps[end_index]]
+
+def get_longest_consecutive_ones(x):
+    max_count, cur_count = 0, 0
+    max_end_index = 0
+
+    for index, num in enumerate(x):
+        if num == 1:
+            cur_count += 1
+        elif num == 0:
+            if cur_count > max_count:
+                max_count = cur_count
+                max_end_index = index - 1
+            cur_count = 0
+
+    return (max_count, max_end_index - max_count + 1, max_end_index)
 
